@@ -1,0 +1,82 @@
+name: Setup Heldino.com Application
+
+on:
+  workflow_dispatch:  # Permet l'exécution manuelle depuis l'interface GitHub
+
+env:
+  # Chemin standard pour le fichier de la clé SSH privée sur le runner
+  SSH_KEY_FILE_PATH: ~/.ssh/deploy_key_github_action
+
+jobs:
+  setup-application:
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Set up SSH
+        run: |
+          echo "Setting up SSH..."
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ${{ env.SSH_KEY_FILE_PATH }}
+          chmod 600 ${{ env.SSH_KEY_FILE_PATH }}
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+          echo "SSH Setup complete."
+
+      - name: Setup Laravel Application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            echo "🚀 Setting up Laravel application..."
+            
+            # Attendre que les services soient prêts
+            echo "Waiting for services to be ready..."
+            sleep 30
+            
+            # Vérifier que le conteneur PHP est en cours d'exécution
+            PHP_CONTAINER=$(docker ps -q -f name=heldino_stack_php-heldino)
+            if [ -z "$PHP_CONTAINER" ]; then
+              echo "❌ PHP container not found. Make sure the stack is deployed first."
+              exit 1
+            fi
+            
+            echo "📝 Generating application key..."
+            docker exec $PHP_CONTAINER php artisan key:generate --force
+            
+            echo "🗄️ Running database migrations..."
+            docker exec $PHP_CONTAINER php artisan migrate --force
+            
+            echo "📦 Clearing application cache..."
+            docker exec $PHP_CONTAINER php artisan cache:clear
+            docker exec $PHP_CONTAINER php artisan config:clear
+            docker exec $PHP_CONTAINER php artisan route:clear
+            docker exec $PHP_CONTAINER php artisan view:clear
+            
+            echo "👤 Creating admin user for Filament..."
+            docker exec $PHP_CONTAINER php artisan tinker --execute="
+            if (!App\Models\User::where('email', 'admin@heldino.com')->exists()) { 
+              App\Models\User::create([
+                'name' => 'Admin', 
+                'email' => 'admin@heldino.com', 
+                'password' => bcrypt('admin123')
+              ]); 
+              echo 'Admin user created successfully'; 
+            } else { 
+              echo 'Admin user already exists'; 
+            }"
+            
+            echo "🔧 Optimizing application..."
+            docker exec $PHP_CONTAINER php artisan config:cache
+            docker exec $PHP_CONTAINER php artisan route:cache
+            docker exec $PHP_CONTAINER php artisan view:cache
+            
+            echo "✅ Application setup completed successfully!"
+            echo ""
+            echo "🌐 Your application should be accessible at: ${{ secrets.APP_URL }}:8080"
+            echo "🔧 Admin panel: ${{ secrets.APP_URL }}:8080/admin"
+            echo "👤 Admin credentials: admin@heldino.com / admin123"
+            echo ""
+            echo "⚠️  Don't forget to change the admin password after first login!"
