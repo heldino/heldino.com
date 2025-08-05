@@ -91,7 +91,6 @@ jobs:
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
           
           sudo chmod 666 /var/run/docker.sock
-          cd ~/stacks
           
           # Arrêter et supprimer les services utilisant le volume myapps_heldino-app-data
           docker service rm myapps_nginx-heldino
