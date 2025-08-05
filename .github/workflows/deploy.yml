@@ -83,54 +83,6 @@ jobs:
             APP_ENV=${{ secrets.APP_ENV }}
             APP_DEBUG=${{ secrets.APP_DEBUG }}
             APP_URL=${{ secrets.APP_URL }}
-
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            set -e
-            echo "Deploying new image..."
-            
-            # Gérer les permissions docker.sock. Idéalement, configurer l'utilisateur VPS_USER
-            # pour qu'il fasse partie du groupe docker sur le VPS.
-            # Exemple : sudo usermod -aG docker ${{ secrets.VPS_USER }} (nécessite une reconnexion de session sur le VPS)
-            # if [ -e /var/run/docker.sock ] && ! sudo -n true 2>/dev/null; then
-            #   # Si on n'a pas sudo sans mot de passe, et que docker.sock existe, on essaie sans sudo.
-            #   # Si on a sudo sans mdp, on peut envisager d'ajuster les permissions (mais c'est risqué).
-            #   echo "Attempting Docker commands without sudo. Ensure ${{ secrets.VPS_USER }} has Docker permissions."
-            # fi
-
-            cd ~/stacks
-
-            echo "Logging in to GHCR on VPS if needed for pull..."
-            # Si votre image est privée et que le VPS a besoin de s'authentifier pour pull,
-            # assurez-vous que Docker sur le VPS est configuré pour GHCR.
-            # L'option --with-registry-auth sur docker stack deploy aide pour cela
-            # en utilisant les credentials du noeud qui lance la commande.
-
-            echo "Removing existing stack: heldino_stack (if any)..."
-            docker stack rm heldino_stack || echo "Stack heldino_stack not found or already removed."
-            echo "Waiting for stack removal to complete..."
-            sleep 30
-
-            # La suppression des volumes est optionnelle et entraîne une perte de données.
-            echo "Removing persistent volumes (optional)..."
-            docker volume rm heldino_stack_heldino-app-data || echo "Volumes not found or already removed."
-            sleep 10
-
-            echo "Deploying stack: heldino_stack..."
-            docker stack deploy -c heldino-stack.yml heldino_stack --with-registry-auth --prune --detach=true
-
-            echo "Waiting for services to stabilize..."
-            sleep 60 
-
-            echo "Checking stack services..."
-            docker stack ps heldino_stack
-
-
-            echo "✅ Deployment script completed."
       - name: Deploy to VPS
         run: |
           echo "Déploiement de la nouvelle image..."

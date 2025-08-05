@@ -50,7 +50,144 @@
             @endif
         </header>
        
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.</p>
+        <!-- Hero Section -->
+        <main class="w-full max-w-6xl mx-auto">
+            <section class="text-center py-20">
+                <div class="mb-8 animate-fade-in-up">
+                    <h1 class="text-5xl lg:text-7xl font-bold gradient-text mb-6 animate-float">
+                        Heldino
+                    </h1>
+                    <p class="text-xl lg:text-2xl text-[#706f6c] dark:text-[#A1A09A] mb-8">
+                        Développeur Full Stack passionné
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4 mb-12">
+                        <span class="px-4 py-2 bg-[#F53003] text-white rounded-full text-sm font-medium hover-lift hover:animate-pulse-glow cursor-default">Laravel</span>
+                        <span class="px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium hover-lift cursor-default">React</span>
+                        <span class="px-4 py-2 bg-green-600 text-white rounded-full text-sm font-medium hover-lift cursor-default">Vue.js</span>
+                        <span class="px-4 py-2 bg-yellow-600 text-white rounded-full text-sm font-medium hover-lift cursor-default">JavaScript</span>
+                        <span class="px-4 py-2 bg-purple-600 text-white rounded-full text-sm font-medium hover-lift cursor-default">PHP</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="py-16 border-t border-[#e3e3e0] dark:border-[#3E3E3A]">
+                <div class="max-w-4xl mx-auto text-center">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-[#1b1b18] dark:text-[#EDEDEC] mb-8">
+                        À propos
+                    </h2>
+                    <p class="text-lg text-[#706f6c] dark:text-[#A1A09A] leading-relaxed mb-8">
+                        Développeur passionné avec plusieurs années d'expérience dans la création d'applications web modernes. 
+                        Je me spécialise dans le développement full-stack avec Laravel, React, et les technologies modernes.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section class="py-16 border-t border-[#e3e3e0] dark:border-[#3E3E3A]">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-[#1b1b18] dark:text-[#EDEDEC] mb-12 text-center">
+                        Compétences
+                    </h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="p-6 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg hover-lift">
+                            <h3 class="text-xl font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-4">Frontend</h3>
+                            <ul class="text-[#706f6c] dark:text-[#A1A09A] space-y-2">
+                                <li>• React & Vue.js</li>
+                                <li>• TypeScript</li>
+                                <li>• Tailwind CSS</li>
+                                <li>• HTML5 & CSS3</li>
+                            </ul>
+                        </div>
+                        <div class="p-6 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg hover-lift">
+                            <h3 class="text-xl font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-4">Backend</h3>
+                            <ul class="text-[#706f6c] dark:text-[#A1A09A] space-y-2">
+                                <li>• Laravel & PHP</li>
+                                <li>• Node.js</li>
+                                <li>• MySQL & PostgreSQL</li>
+                                <li>• API REST</li>
+                            </ul>
+                        </div>
+                        <div class="p-6 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg hover-lift">
+                            <h3 class="text-xl font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-4">Outils</h3>
+                            <ul class="text-[#706f6c] dark:text-[#A1A09A] space-y-2">
+                                <li>• Git & GitHub</li>
+                                <li>• Docker</li>
+                                <li>• VS Code</li>
+                                <li>• Figma</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section class="py-16 border-t border-[#e3e3e0] dark:border-[#3E3E3A]">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-[#1b1b18] dark:text-[#EDEDEC] mb-12 text-center">
+                        Projets
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg overflow-hidden hover-lift cursor-pointer">
+                            <div class="h-48 bg-gradient-to-br from-[#F53003] to-[#ff6b47]"></div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-3">
+                                    Application E-commerce
+                                </h3>
+                                <p class="text-[#706f6c] dark:text-[#A1A09A] mb-4">
+                                    Plateforme e-commerce complète développée avec Laravel et Vue.js
+                                </p>
+                                <div class="flex gap-2 flex-wrap">
+                                    <span class="px-3 py-1 bg-[#F53003] text-white text-xs rounded-full">Laravel</span>
+                                    <span class="px-3 py-1 bg-green-600 text-white text-xs rounded-full">Vue.js</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-lg overflow-hidden hover-lift cursor-pointer">
+                            <div class="h-48 bg-gradient-to-br from-blue-600 to-blue-400"></div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-[#1b1b18] dark:text-[#EDEDEC] mb-3">
+                                    Dashboard Analytics
+                                </h3>
+                                <p class="text-[#706f6c] dark:text-[#A1A09A] mb-4">
+                                    Interface d'analyse de données avec graphiques interactifs
+                                </p>
+                                <div class="flex gap-2 flex-wrap">
+                                    <span class="px-3 py-1 bg-blue-600 text-white text-xs rounded-full">React</span>
+                                    <span class="px-3 py-1 bg-yellow-600 text-white text-xs rounded-full">Chart.js</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="py-16 border-t border-[#e3e3e0] dark:border-[#3E3E3A]">
+                <div class="max-w-2xl mx-auto text-center">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-[#1b1b18] dark:text-[#EDEDEC] mb-8">
+                        Contact
+                    </h2>
+                    <p class="text-lg text-[#706f6c] dark:text-[#A1A09A] mb-8">
+                        Intéressé par une collaboration ? N'hésitez pas à me contacter !
+                    </p>
+                    <div class="flex justify-center gap-6">
+                        <a href="mailto:contact@heldino.com" 
+                           class="px-6 py-3 bg-[#F53003] hover:bg-[#d42a00] text-white rounded-lg font-medium transition-colors">
+                            Email
+                        </a>
+                        <a href="https://github.com/heldino" 
+                           class="px-6 py-3 border border-[#e3e3e0] dark:border-[#3E3E3A] hover:border-[#1b1b18] dark:hover:border-[#EDEDEC] text-[#1b1b18] dark:text-[#EDEDEC] rounded-lg font-medium transition-colors">
+                            GitHub
+                        </a>
+                        <a href="https://linkedin.com/in/heldino" 
+                           class="px-6 py-3 border border-[#e3e3e0] dark:border-[#3E3E3A] hover:border-[#1b1b18] dark:hover:border-[#EDEDEC] text-[#1b1b18] dark:text-[#EDEDEC] rounded-lg font-medium transition-colors">
+                            LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
 
         @if (Route::has('login'))
             <div class="h-14.5 hidden lg:block"></div>
