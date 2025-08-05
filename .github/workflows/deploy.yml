@@ -126,5 +126,5 @@ jobs:
           # IMPORTANT : Forcer la mise à jour du proxy pour qu'il recharge sa configuration
           docker service update --force myapps_nginx-proxy
           
-          echo "Le service LMS a été redéployé avec succès."
+          echo "Le service HELDINO a été redéployé avec succès."
           EOF

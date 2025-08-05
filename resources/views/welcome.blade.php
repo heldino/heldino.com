@@ -55,7 +55,7 @@
             <section class="text-center py-20">
                 <div class="mb-8 animate-fade-in-up">
                     <h1 class="text-5xl lg:text-7xl font-bold gradient-text mb-6 animate-float">
-                        Heldino
+                        Heldino HERBERT
                     </h1>
                     <p class="text-xl lg:text-2xl text-[#706f6c] dark:text-[#A1A09A] mb-8">
                         Développeur Full Stack passionné
