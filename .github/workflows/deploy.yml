@@ -84,43 +84,6 @@ jobs:
             APP_DEBUG=${{ secrets.APP_DEBUG }}
             APP_URL=${{ secrets.APP_URL }}
 
-      - name: Copy nginx.conf to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "nginx.conf"
-          target: "~/stacks"
-
-      - name: Copy heldino.conf to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "nginx/heldino.conf"
-          target: "~/stacks/nginx"
-
-      - name: Copy php.ini to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "php.ini"
-          target: "~/stacks"
-
-      - name: Copy heldino-stack.yml to VPS
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "heldino-stack.yml"
-          target: "~/stacks"
-
-      - name: Deploy the new image
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -168,3 +131,46 @@ jobs:
 
 
             echo "✅ Deployment script completed."
+      - name: Deploy to VPS
+        run: |
+          echo "Déploiement de la nouvelle image Heldino..."
+          ssh -o StrictHostKeyChecking=no \
+            -i ${{ env.SSH_KEY_FILE_PATH }} \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+          
+          sudo chmod 666 /var/run/docker.sock
+          cd ~/stacks
+          
+          # Arrêter et supprimer les services Heldino
+          docker service rm myapps_nginx-heldino
+          sleep 10
+          docker service rm myapps_php-heldino
+          sleep 15
+          
+          # Supprimer les conteneurs utilisant le volume heldino (si applicable)
+          containers=$(docker ps -a --filter volume=myapps_heldino-app-data -q)
+          if [ -n "$containers" ]; then
+            docker rm -f $containers
+          else
+            echo "Aucun conteneur trouvé avec le volume 'myapps_heldino-app-data'."
+          fi
+          
+          sleep 15
+          
+          # Forcer l'arrêt et la suppression des conteneurs restants
+          remaining_containers=$(docker ps -a -q --filter "name=myapps_php-heldino")
+          if [ -n "$remaining_containers" ]; then
+            docker rm -f $remaining_containers
+          fi
+          
+          # Supprimer le volume heldino (si applicable)
+          docker volume rm myapps_heldino-app-data 2>/dev/null || echo "Volume heldino non trouvé ou déjà supprimé"
+          
+          # Redéployer la stack entière avec la configuration corrigée
+          docker stack deploy -c stack.yml myapps --with-registry-auth --detach=false
+          
+          # IMPORTANT : Forcer la mise à jour du proxy pour qu'il recharge sa configuration
+          docker service update --force myapps_nginx-proxy
+          
+          echo "Le service Heldino a été redéployé avec succès."
+          EOF
