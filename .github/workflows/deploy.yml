@@ -84,7 +84,6 @@ jobs:
             APP_DEBUG=${{ secrets.APP_DEBUG }}
             APP_URL=${{ secrets.APP_URL }}
 
-      - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -132,3 +131,48 @@ jobs:
 
 
             echo "✅ Deployment script completed."
+      - name: Deploy to VPS
+        run: |
+          echo "Déploiement de la nouvelle image..."
+          ssh -o StrictHostKeyChecking=no \
+            -i ${{ env.SSH_KEY_FILE_PATH }} \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+          
+          sudo chmod 666 /var/run/docker.sock
+          cd ~/stacks
+          
+          # Arrêter et supprimer les services utilisant le volume myapps_heldino-app-data
+          docker service rm myapps_nginx-heldino
+          sleep 10
+          docker service rm myapps_php-heldino
+          sleep 10
+          docker service rm myapps_queue-worker-heldino
+          sleep 15
+          
+          # Supprimer les conteneurs utilisant le volume heldino-app-data
+          containers=$(docker ps -a --filter volume=heldino-app-data -q)
+          if [ -n "$containers" ]; then
+            docker rm -f $containers
+          else
+            echo "Aucun conteneur trouvé avec le volume 'heldino-app-data'."
+          fi
+          
+          sleep 15
+          
+          # Forcer l'arrêt et la suppression des conteneurs restants
+          remaining_containers=$(docker ps -a -q --filter "name=myapps_php-heldino")
+          if [ -n "$remaining_containers" ]; then
+            docker rm -f $remaining_containers
+          fi
+          
+          # Supprimer le volume heldino-app-data
+          docker volume rm myapps_heldino-app-data
+          
+          # Redéployer la stack entière avec la configuration corrigée
+          docker stack deploy -c stack.yml myapps --with-registry-auth --detach=false
+          
+          # IMPORTANT : Forcer la mise à jour du proxy pour qu'il recharge sa configuration
+          docker service update --force myapps_nginx-proxy
+          
+          echo "Le service LMS a été redéployé avec succès."
+          EOF
