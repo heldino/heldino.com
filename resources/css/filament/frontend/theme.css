@@ -1,0 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === THEME LMS LEARNYCOOL === */
+/* Couleurs spécifiques à l'application LMS */
+:root {
+    --lms-primary: #3b82f6;
+    --lms-primary-dark: #1d4ed8;
+    --lms-secondary: #10b981;
+    --lms-accent: #f59e0b;
+    --lms-background: #f8fafc;
+    --lms-surface: #ffffff;
+    --lms-text: #1f2937;
+    --lms-text-light: #6b7280;
+}
+
+/* Masquer les éléments Filament par défaut */
+.fi-main {
+    padding: 0 !important;
+    background: var(--lms-background);
+}
+
+.fi-page {
+    padding: 0 !important;
+    background: transparent;
+}
+
+.fi-header {
+    display: none !important;
+}
+
+.fi-sidebar {
+    display: none !important;
+}
+
+/* === NAVIGATION LMS === */
+.frontend-nav {
+    background: var(--lms-surface);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px 0 rgb(0 0 0 / 0.06);
+    border-bottom: 1px solid #e5e7eb;
+    backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.frontend-nav .container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.frontend-nav nav a {
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.frontend-nav nav a:hover {
+    transform: translateY(-1px);
+}
+
+.frontend-nav nav a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--lms-primary);
+    border-radius: 1px;
+}
+
+/* === SECTIONS ET CARTES === */
+.fi-section {
+    background: var(--lms-surface);
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    transition: all 0.3s ease;
+}
+
+.fi-section:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+    transform: translateY(-1px);
+}
+
+/* === BOUTONS PERSONNALISÉS === */
+.fi-btn-primary {
+    background: linear-gradient(135deg, var(--lms-primary) 0%, var(--lms-primary-dark) 100%);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.fi-btn-primary:hover {
+    background: linear-gradient(135deg, var(--lms-primary-dark) 0%, #1e40af 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* === BADGES ET INDICATEURS === */
+.fi-badge {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    font-size: 0.75rem;
+}
+
+.fi-badge-success {
+    background: var(--lms-secondary);
+}
+
+.fi-badge-warning {
+    background: var(--lms-accent);
+}
+
+/* === HERO SECTIONS === */
+.hero-gradient {
+    background: linear-gradient(135deg, var(--lms-primary) 0%, #8b5cf6 50%, var(--lms-secondary) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* === RESPONSIVE === */
+@media (min-width: 640px) {
+    .frontend-nav .container {
+        padding: 0 1.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .frontend-nav .container {
+        padding: 0 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .fi-section {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+    
+    .frontend-nav {
+        position: relative;
+    }
+}
+
+/* === DARK MODE SUPPORT === */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --lms-background: #0f172a;
+        --lms-surface: #1e293b;
+        --lms-text: #f1f5f9;
+        --lms-text-light: #94a3b8;
+    }
+    
+    .frontend-nav {
+        background: var(--lms-surface);
+        border-bottom-color: #334155;
+    }
+}
+
+/* === SCROLL BEHAVIOR === */
+html {
+    scroll-behavior: smooth;
+}
+
+/* === FOCUS STATES === */
+.fi-btn:focus,
+.frontend-nav a:focus {
+    outline: 2px solid var(--lms-primary);
+    outline-offset: 2px;
+}
